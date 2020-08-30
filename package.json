@@ -4,7 +4,7 @@
   "description": "UI",
   "main": "dist/server.js",
   "engines": {
-    "node": "10.x",
+    "node": "14.x",
     "npm": "6.x"
   },
   "scripts": {
