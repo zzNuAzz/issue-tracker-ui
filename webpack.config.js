@@ -7,7 +7,7 @@ const webpack = require('webpack');
 
 const browserConfig = {
   mode: 'development',
-  entry: { app: ['./browser/App.jsx'] },
+  entry: { app: ['./browser/app.jsx'] },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'public'),
