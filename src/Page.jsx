@@ -91,15 +91,7 @@ export default function Page(props) {
 
   useEffect(() => {
     (async () => {
-      // const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
-      // const response = await fetch(`${apiEndpoint}/user`, {
-      //   method: 'POST',
-      //   credentials: 'include',
-      // });
-      // const body = await response.text();
-      // const result = JSON.parse(body);
-      // const { signedIn, givenName, picture } = result;
-      // setUser({ signedIn, givenName, picture });
+      
       if (user == null) {
         const data = await Page.fetchData();
         setUser(data.user);
