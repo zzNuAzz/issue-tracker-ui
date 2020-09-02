@@ -48,11 +48,21 @@ if (!process.env.UI_AUTH_ENDPOINT) {
   process.env.UI_AUTH_ENDPOINT = 'http://localhost:3000/auth';
 }
 
+app.get(
+  '/.well-known/pki-validation/4347F3C4A41B419CD16B6C3B844D4711.txt',
+  (req, res) => {
+    res.send(`4F4CE38EC0998A8A13BD8F3E8AE944C5DC92F85D7CB5B47EC8377DB70ECD5EC5
+comodoca.com
+390322f801ccf79`);
+  }
+);
+
 app.get('/env.js', (req, res) => {
   const env = {
     UI_API_ENDPOINT: process.env.UI_API_ENDPOINT,
     UI_AUTH_ENDPOINT: process.env.UI_AUTH_ENDPOINT,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    FACEBOOK_APP_ID_OAUTH: process.env.FACEBOOK_APP_ID_OAUTH,
   };
   res.send(`window.ENV = ${JSON.stringify(env)}`);
 });
