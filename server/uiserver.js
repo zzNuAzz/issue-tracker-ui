@@ -49,9 +49,9 @@ if (!process.env.UI_AUTH_ENDPOINT) {
 }
 
 app.get(
-  '/.well-known/acme-challenge/wa3jBgWVYskKXjXov2umLB6WjHFlBRRka-MxWENXVks',
+  '/.well-known/pki-validation/4347F3C4A41B419CD16B6C3B844D4711.txt',
   (req, res) => {
-    res.sendFile(path.resolve('public/cert.txt'));
+    res.sendFile(path.resolve('public/4347F3C4A41B419CD16B6C3B844D4711.txt'));
   }
 );
 
