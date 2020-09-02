@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import proxy from 'http-proxy-middleware';
 import SourceMapSupport from 'source-map-support';
 import render from './render.jsx';
-
+import path from 'path';
 const app = express();
 
 SourceMapSupport.install();
@@ -51,9 +51,7 @@ if (!process.env.UI_AUTH_ENDPOINT) {
 app.get(
   '/.well-known/pki-validation/4347F3C4A41B419CD16B6C3B844D4711.txt',
   (req, res) => {
-    res.send(`4F4CE38EC0998A8A13BD8F3E8AE944C5DC92F85D7CB5B47EC8377DB70ECD5EC5
-comodoca.com
-390322f801ccf79`);
+    res.sendFile(path.resolve('public/4347F3C4A41B419CD16B6C3B844D4711.txt'));
   }
 );
 
