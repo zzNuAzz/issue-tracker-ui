@@ -91,10 +91,12 @@ export default function Page(props) {
 
   useEffect(() => {
     (async () => {
-      
       if (user == null) {
         const data = await Page.fetchData();
-        setUser(data.user);
+        if (data) {
+          const { user } = data;
+          setUser(user ? user : { signedIn: false });
+        }
       }
     })();
   }, []);
