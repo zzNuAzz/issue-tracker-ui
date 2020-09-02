@@ -1,5 +1,6 @@
 import serialize from 'serialize-javascript';
-
+import dotenv from 'dotenv';
+dotenv.config();
 export default function template(body, initialData, userData) {
   return `<!DOCTYPE HTML>
     <html lang="en">
@@ -32,6 +33,24 @@ export default function template(body, initialData, userData) {
     </head>
 
     <body>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '${process.env.FACEBOOK_APP_ID_OAUTH}',
+          cookie     : true,
+          xfbml      : true,
+          version    : '${process.env.FACEBOOK_GRAPH_VERSION}'  
+       });
+      FB.AppEvents.logPageView();};
+      
+      (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
         <div id="contents">${body}</div>
         <script>window.__INITIAL_DATA__ = ${serialize(initialData)}</script>
         <script>window.__USER_DATA__ = ${serialize(userData)}</script>

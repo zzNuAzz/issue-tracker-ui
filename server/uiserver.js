@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import proxy from 'http-proxy-middleware';
 import SourceMapSupport from 'source-map-support';
 import render from './render.jsx';
-
+import path from 'path';
 const app = express();
 
 SourceMapSupport.install();
@@ -32,8 +32,8 @@ app.use(express.static('public'));
 const apiProxyTarget = process.env.API_PROXY_TARGET;
 
 if (apiProxyTarget) {
-  app.use('/graphql', proxy({ target: apiProxyTarget, changeOrigin: true }));
-  app.use('/auth', proxy({ target: apiProxyTarget, changeOrigin: true }));
+  app.use('/graphql', proxy({ target: apiProxyTarget }));
+  app.use('/auth', proxy({ target: apiProxyTarget }));
 }
 
 if (!process.env.UI_API_ENDPOINT) {
@@ -53,6 +53,7 @@ app.get('/env.js', (req, res) => {
     UI_API_ENDPOINT: process.env.UI_API_ENDPOINT,
     UI_AUTH_ENDPOINT: process.env.UI_AUTH_ENDPOINT,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    FACEBOOK_APP_ID_OAUTH: process.env.FACEBOOK_APP_ID_OAUTH,
   };
   res.send(`window.ENV = ${JSON.stringify(env)}`);
 });
