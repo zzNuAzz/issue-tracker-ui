@@ -61,18 +61,24 @@ app.get('*', (req, res, next) => {
   console.log('*', req.params);
   render(req, res, next);
 });
-
-const fs = require('fs');
-const https = require('https');
-var key = fs.readFileSync('/Users/nua/Workspace/pro-mern-stack-2/test-ssl.local.key');
-var cert = fs.readFileSync('/Users/nua/Workspace/pro-mern-stack-2/test-ssl.local.crt');
-var options = {
-  key: key,
-  cert: cert,
-};
-var server = https.createServer(options, app);
+let server;
+if (process.env.NODE_ENV !== 'production') {
+  const fs = require('fs');
+  const https = require('https');
+  const key = fs.readFileSync(
+    '/Users/nua/Workspace/pro-mern-stack-2/test-ssl.local.key'
+  );
+  const cert = fs.readFileSync(
+    '/Users/nua/Workspace/pro-mern-stack-2/test-ssl.local.crt'
+  );
+  const options = {
+    key: key,
+    cert: cert,
+  };
+  server = https.createServer(options, app);
+}
 const port = process.env.PORT || 8000;
-server.listen(port, () => {
+(server || app).listen(port, () => {
   console.log(`UI listen on port ${port}`);
 });
 
