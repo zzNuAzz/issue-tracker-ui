@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import proxy from 'http-proxy-middleware';
 import SourceMapSupport from 'source-map-support';
 import render from './render.jsx';
-import path from 'path';
 const app = express();
 
 SourceMapSupport.install();
@@ -63,8 +62,17 @@ app.get('*', (req, res, next) => {
   render(req, res, next);
 });
 
+const fs = require('fs');
+const https = require('https');
+var key = fs.readFileSync('/Users/nua/Workspace/pro-mern-stack-2/test-ssl.local.key');
+var cert = fs.readFileSync('/Users/nua/Workspace/pro-mern-stack-2/test-ssl.local.crt');
+var options = {
+  key: key,
+  cert: cert,
+};
+var server = https.createServer(options, app);
 const port = process.env.PORT || 8000;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`UI listen on port ${port}`);
 });
 

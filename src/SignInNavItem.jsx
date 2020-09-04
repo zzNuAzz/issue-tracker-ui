@@ -57,15 +57,47 @@ function SignInNavItem({ user, onUserChange, showError }) {
     }
   };
 
-  const facebookSignIn = () => {
+  const facebookSignIn = async () => {
     hideModal();
-    let facebookToken;
-    FB.login(
-      function (response) {
-        console.log(response);
-      },
-      { scope: 'public_profile,email' }
-    );
+
+    try {
+      FB.login(
+        async response => {
+          let facebookToken;
+          let userID;
+          if (response.status == 'connected') {
+            facebookToken = response.authResponse.accessToken;
+            userID = response.authResponse.userID;
+          } else {
+            showError(`Authenticate with Facebook failed: ${response.status}`);
+            return;
+          }
+          const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+          const res = await fetch(`${apiEndpoint}/signin`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              facebook_token: facebookToken,
+              user_id: userID,
+              type: 'fb',
+            }),
+          });
+          const body = await res.text();
+          console.log(body);
+          const result = JSON.parse(body);
+          const { signedIn, givenName, picture } = result;
+          onUserChange({ signedIn, givenName, picture, type: 'fb' });
+        },
+        { scope: 'public_profile,email' }
+      );
+    } catch (error) {
+      showError(
+        `Error authenticating with Facebook: ${
+          error.error ? error.error : 'Unknown'
+        }`
+      );
+    }
   };
   const signOut = async () => {
     const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
@@ -73,12 +105,17 @@ function SignInNavItem({ user, onUserChange, showError }) {
       await fetch(`${apiEndpoint}/signout`, {
         method: 'POST',
         credentials: 'include',
+        body: JSON.stringify({ type: user.type }),
       });
       switch (user.type) {
         case 'gg':
           const auth2 = window.gapi.auth2.getAuthInstance();
           await auth2.signOut();
         case 'fb':
+          FB.logout(function (response) {
+            // user is now logged out
+            console.log(response);
+          });
       }
       onUserChange({ signedIn: false });
     } catch (error) {

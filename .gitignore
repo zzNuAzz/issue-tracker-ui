@@ -4,3 +4,4 @@ node_modules
 public/*.js
 public/*.js.map
 public/bootstrap
+.DS_Store
